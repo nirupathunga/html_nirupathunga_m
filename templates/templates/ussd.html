@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnityScan AI - USSD Survey</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="ussd-screen min-h-screen p-4 text-white">
+    <div class="max-w-md mx-auto">
+        <div class="bg-black bg-opacity-50 rounded-2xl p-6 mb-6">
+            <h2 class="text-2xl font-bold">{{ lang.ussdTitle }}</h2>
+            <p class="text-sm opacity-75">Feature Phone Interface</p>
+        </div>
+        <div class="bg-black bg-opacity-70 rounded-2xl p-6">
+            {% if surveys and survey_id %}
+                {% set survey = surveys|selectattr('id', 'equalto', survey_id|int)|first %}
+                {% if survey %}
+                    {% set current_step = request.args.get('step', 0)|int %}
+                    {% set questions = survey.questions %}
+                    {% if current_step < questions|length %}
+                        {% set current_question = questions[current_step] %}
+                        <h3 class="text-xl mb-4">Q{{ current_step + 1 }}: {{ current_question.text }}</h3>
+                        <div class="space-y-3">
+                            {% for option in current_question.options %}
+                                <button onclick="submitUSSD({{ loop.index0 }})" class="w-full text-left p-3 bg-yellow-500 hover:bg-yellow-600 rounded-xl border-2 border-yellow-400 glow-button">
+                                    {{ loop.index }}. {{ option }}
+                                </button>
+                            {% endfor %}
+                        </div>
+                        <div class="mt-6 flex justify-between">
+                            <button onclick="goBack()" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-xl glow-button">{{ lang.back }}</button>
+                            <span class="text-sm opacity-75">{{ current_step + 1 }}/{{ questions|length }}</span>
+                        </div>
+                    {% else %}
+                        <p>Survey completed. Redirecting...</p>
+                        <script>window.location.href = '/complete';</script>
+                    {% endif %}
+                {% else %}
+                    <p>No survey found for ID {{ survey_id }}.</p>
+                {% endif %}
+            {% else %}
+                <p>No survey ID provided.</p>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        function submitUSSD(optionIndex) {
+            const step = {{ request.args.get('step', 0)|int }} + 1;
+            window.location.href = `/ussd?surveyId={{ survey_id }}&step=${step}&option=${optionIndex}`;
+        }
+        function goBack() {
+            const step = {{ request.args.get('step', 0)|int }} - 1;
+            if (step >= 0) {
+                window.location.href = `/ussd?surveyId={{ survey_id }}&step=${step}`;
+            } else {
+                window.location.href = '/';
+            }
+        }
+    </script>
+</body>
+</html>
