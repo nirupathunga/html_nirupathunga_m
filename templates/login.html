@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnityScan AI - Login</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="hero-bg min-h-screen flex items-center">
+    <div class="max-w-md mx-auto bg-white rounded-2xl shadow-2xl p-8 transform hover:scale-105 transition duration-300">
+        <h2 class="text-3xl font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-lg mb-6 text-center">{{ lang.login }}</h2>
+        <form method="POST" action="/login" class="space-y-6">
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-2">{{ lang.username }}</label>
+                <input type="text" name="username" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500" required>
+            </div>
+            <div>
+                <label class="block text-lg font-semibold text-gray-700 mb-2">{{ lang.password }}</label>
+                <input type="password" name="password" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500" required>
+            </div>
+            {% if error %}
+                <p class="text-red-500 text-sm">{{ error }}</p>
+            {% endif %}
+            <button type="submit" class="w-full py-4 bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white rounded-xl font-semibold glow-button">
+                {{ lang.login }}
+            </button>
+        </form>
+    </div>
+</body>
+</html>
