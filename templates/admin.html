@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnityScan AI - Admin</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-yellow-100 to-orange-100 p-4">
+    <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 bg-gradient-to-r from-yellow-500 to-orange-500 p-4 rounded-lg text-center">Admin Dashboard</h2>
+        <button onclick="window.location.href='/logout'" class="mb-4 px-6 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl glow-button">
+            Logout
+        </button>
+        <div class="bg-white rounded-2xl shadow-2xl p-6 mb-6">
+            <h3 class="text-xl font-semibold mb-4">Create Survey</h3>
+            <form method="POST" action="/admin/create_survey" class="space-y-6">
+                <div>
+                    <label class="block text-lg font-semibold text-gray-700 mb-2">Survey Title</label>
+                    <input type="text" name="title" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500" required>
+                </div>
+                <div>
+                    <label class="block text-lg font-semibold text-gray-700 mb-2">Question 1</label>
+                    <input type="text" name="question1" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500" required>
+                </div>
+                <div>
+                    <label class="block text-lg font-semibold text-gray-700 mb-2">Question 2</label>
+                    <input type="text" name="question2" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500" required>
+                </div>
+                <div>
+                    <label class="block text-lg font-semibold text-gray-700 mb-2">Target Language</label>
+                    <select name="language" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500">
+                        {% for code, lang in LANGUAGES.items() %}
+                            <option value="{{ code }}">{{ lang.region }} ({{ lang.name }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-xl font-semibold glow-button">
+                    Create Survey
+                </button>
+            </form>
+        </div>
+        <div class="bg-white rounded-2xl shadow-2xl p-6">
+            <h3 class="text-xl font-semibold mb-4">Surveys</h3>
+            {% if not surveys %}
+                <p class="text-gray-600">No surveys created.</p>
+            {% else %}
+                {% for survey in surveys %}
+                    <div class="border-b py-4">
+                        <h4 class="font-semibold text-lg">{{ survey.title }}</h4>
+                        <p class="text-gray-600">Language: {{ LANGUAGES[survey.language].name }}</p>
+                        <p class="text-gray-600">USSD Preview: {{ survey.questions|map(attribute='text')|join(', ') }}</p>
+                        <div class="mt-2">
+                            <img src="{{ url_for('generate_qr', survey_id=survey.id) }}" class="border-4 border-gray-300 rounded-2xl">
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
