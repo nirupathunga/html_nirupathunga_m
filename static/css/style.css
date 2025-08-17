@@ -1,0 +1,28 @@
+.hero-bg {
+    background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+    animation: gradientShift 10s ease infinite;
+}
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.ussd-screen {
+    background: linear-gradient(135deg, #ff9f43, #ee5253);
+    font-family: 'Courier New', monospace;
+}
+.glow-button {
+    transition: all 0.3s ease;
+}
+.glow-button:hover {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    transform: translateY(-2px);
+}
+.language-indicator {
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
