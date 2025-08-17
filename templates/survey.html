@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnityScan AI - Survey</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 p-4">
+    <div class="max-w-md mx-auto">
+        <div class="bg-white rounded-2xl shadow-2xl p-6">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center bg-gradient-to-r from-indigo-500 to-purple-500 p-4 rounded-xl">{{ lang.welcome }}</h2>
+            <form method="POST" action="/complete" class="space-y-6">
+                <input type="hidden" name="surveyId" value="{{ survey_id }}">
+                <div>
+                    <label class="block text-lg font-semibold text-gray-700 mb-2">1. {{ lang.question1 }}</label>
+                    <div class="space-y-2">
+                        {% for option in lang.options %}
+                            <label class="flex items-center">
+                                <input type="radio" name="digitalPayment" value="{{ option }}" class="mr-3 text-purple-600 focus:ring-purple-500" required>
+                                <span class="text-lg">{{ option }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-lg font-semibold text-gray-700 mb-2">2. {{ lang.question2 }}</label>
+                    <select name="income" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500" required>
+                        <option value="">Select income range</option>
+                        {% for option in lang.incomeOptions %}
+                            <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white rounded-xl font-semibold glow-button">
+                    {{ lang.submit }}
+                </button>
+                <button type="button" onclick="window.location.href='/'" class="w-full mt-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl glow-button">
+                    {{ lang.back }}
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
